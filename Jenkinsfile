@@ -1,38 +1,27 @@
 pipeline {
-  agent {
-    docker {
-      image 'node:14' 
+  agent any
+  stages {
+    stage('Build') {
+      steps {
+        sh 'g-- ./main/PES2UG20CS915.cpp'
+        echo 'Build Stage Successful'
       }
-     } 
-     stages {
-      stage('CLone repository') {
-        steps{
-          git branch: 'main', 
-          url: 'https://github.com/Pranav120602/PES2UG20CS915_Jenkins.git'
-          } 
-        } 
-        stage('Install dependencies') {
-          steps {
-            sh 'npm install' 
-           } 
-         } 
-         stage('Build application') {
-            steps {
-              sh 'npm run build' 
-              } 
-           } 
-           
-           stage('Test application') {
-            steps {
-              sh 'npm test' 
-              } 
-           } 
-           
-           stage('Push Docker image') {
-            steps {
-              sh 'docker build -t pranavshankar/node:14 
-              sh 'docker push pranavshankar/node:14 
-              } 
-            } 
-         } 
-     } 
+    }
+    stage('Test') {
+      steps {
+        sh './a.out'
+        echo 'Test Stage Successful'
+      }
+    }
+    stage('Deploy') {
+      steps {
+        echo 'Deployment Successful'
+      }
+    }
+  }
+  post {
+      failure {
+        echo 'Pipeline Failed'
+      }
+  }
+}
